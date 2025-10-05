@@ -10,8 +10,10 @@ const connection = mysql.createConnection({
   database: process.env.DB_NAME || 'ped_hospitalar',
   // A porta 3306 é padrão, mas é bom usar uma variável de ambiente para flexibilidade
   port: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 3306,
-  // Adicione a configuração SSL/TLS se o seu provedor de DB exigir, 
-  // o que é comum em serviços de nuvem. Ex: ssl: { rejectUnauthorized: false }
+  
+  // Adiciona a opção SSL para provedores de nuvem que a exigem.
+  // Muitas vezes, a opção `rejectUnauthorized: false` é necessária para certificados auto-assinados em nuvens.
+  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : undefined
 });
 
 connection.connect((err) => {
