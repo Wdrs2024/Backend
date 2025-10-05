@@ -12,7 +12,6 @@
     "express": "^4.21.2",
     "mysql2": "^3.5.2"
   },
-<<<<<<< HEAD
   "engines": {
     "node": "18.x"
   },
@@ -20,17 +19,4 @@
   "author": "",
   "license": "ISC",
   "description": "Backend do sistema Ped Hospitalar"
-=======
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": ""
->>>>>>> 80d197142cf69f55fe45e3dcbd248bdd43f771b8
 }
-
-{
-  "name": "Maria",
-  "email": "maria@example.com",
-  "message": "Olá, quero mais informações."
-}
-
