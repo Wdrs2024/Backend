@@ -1,20 +1,32 @@
+// index.js
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-
-// IMPORTANTE: Em ES Modules, módulos locais precisam da extensão completa (.js).
-import contactsRoutes from './routes/contacts.js'; 
+import contactsRoutes from './routes/contacts.js';
 
 const app = express();
 
-// Middlewares
-app.use(cors());
+// Permitir frontend do Vercel
+app.use(cors({
+  origin: 'https://ped-hospitalar.vercel.app'
+}));
+
+// Middleware
 app.use(bodyParser.json());
 
-// Rota principal
+// Rotas principais
 app.use('/api/contacts', contactsRoutes);
 
-// Inicia o servidor
-app.listen(3000, () => {
-  console.log('Servidor backend rodando em http://localhost:3000');
+// Rota padrão para teste
+app.get('/', (req, res) => {
+  res.status(200).json({
+    message: 'API PED Hospitalar está online!',
+    info: 'Use a rota POST /api/contacts para enviar mensagens.'
+  });
+});
+
+// Inicializa o servidor
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Servidor backend rodando em http://localhost:${PORT}`);
 });
