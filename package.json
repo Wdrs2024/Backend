@@ -1,6 +1,7 @@
 {
-  "name": "backend",
+  "name": "ped-hospitalar-backend",
   "version": "1.0.0",
+  "description": "Backend do sistema Ped Hospitalar",
   "main": "index.js",
   "type": "module",
   "scripts": {
@@ -10,15 +11,12 @@
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "express": "^4.21.2",
-    "mysql2": "^3.5.2",
     "pg": "^8.16.3"
   },
   "engines": {
-  "node": ">=18.x"
-
+    "node": ">=18.x"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "description": "Backend do sistema Ped Hospitalar"
+  "license": "ISC"
 }

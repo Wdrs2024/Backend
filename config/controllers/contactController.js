@@ -1,15 +1,20 @@
-// controllers/contactController.js
-
-export const handleContactForm = (req, res) => {
+export const handleContactForm = async (req, res) => {
   const { nome, email, mensagem } = req.body;
 
-  // Validação simples
   if (!nome || !email || !mensagem) {
     return res.status(400).json({ erro: 'Todos os campos são obrigatórios.' });
   }
 
-  // Aqui você pode salvar os dados no banco ou enviar por email
-  console.log('Formulário recebido:', { nome, email, mensagem });
+  try {
+    const result = await req.db.query(
+      'INSERT INTO contacts (nome, email, mensagem) VALUES ($1, $2, $3) RETURNING id',
+      [nome, email, mensagem]
+    );
 
-  res.status(200).json({ mensagem: 'Mensagem recebida com sucesso!' });
+    console.log('Contato salvo com sucesso! ID:', result.rows[0].id);
+    res.status(201).json({ mensagem: 'Mensagem salva com sucesso!' });
+  } catch (err) {
+    console.error('Erro ao salvar contato:', err);
+    res.status(500).json({ erro: 'Erro interno ao salvar contato.' });
+  }
 };

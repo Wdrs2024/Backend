@@ -1,12 +1,9 @@
-// controllers/contactController.js
-export const handleContactForm = (req, res) => {
-  const { nome, email, mensagem } = req.body;
+import express from 'express';
+import { handleContactForm } from '../controllers/contactController.js';
 
-  if (!nome || !email || !mensagem) {
-    return res.status(400).json({ erro: 'Todos os campos são obrigatórios.' });
-  }
+const router = express.Router();
 
-  console.log('Formulário recebido:', { nome, email, mensagem });
+// POST /api/contacts
+router.post('/', handleContactForm);
 
-  res.status(200).json({ mensagem: 'Mensagem recebida com sucesso!' });
-};
+export default router;
