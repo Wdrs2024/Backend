@@ -11,7 +11,7 @@ const app = express();
 // ✅ Conexão com PostgreSQL (Render fornece DATABASE_URL)
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false } // necessário no Render
+  ssl: { rejectUnauthorized: false } // Certifique-se de que esta linha está presente
 });
 
 // ✅ Disponibiliza pool para rotas (middleware simples)
@@ -78,3 +78,4 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`🚀 Servidor backend rodando na porta ${PORT}`);
 });
+
