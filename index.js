@@ -17,18 +17,46 @@ const pool = new Pool({
 // ✅ Disponibiliza pool para rotas (middleware simples)
 app.set('db', pool);
 
-// ✅ Configuração CORS — agora com suporte a preflight (OPTIONS)
+// ----------------------------------------------------------------------
+// ✅ CONFIGURAÇÃO CORS CORRIGIDA
+// ----------------------------------------------------------------------
+
+// **ATENÇÃO:** Garanta que a lista 'origin' inclua o domínio exato que falhou no console.
+const allowedOrigins = [
+  'https://ped-hospitalar.vercel.app', // Domínio principal de produção
+  'http://localhost:8080', // Desenvolvimento local
+  
+  // ** DOMÍNIO DE PREVIEW DA VERCEL **
+  'https://frontend-amc1l4117-wesleys-projects-3d707875.vercel.app', 
+  
+  // Se o seu frontend mudar de subdomínio, você terá que adicionar o novo aqui também!
+];
+
 app.use(cors({
-  origin: [
-    'https://ped-hospitalar.vercel.app', // produção
-    'http://localhost:8080', // desenvolvimento local
-  ],
-  methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type'],
+  origin: (origin, callback) => {
+    // Permite requisições sem 'origin' (como ferramentas REST) ou se a origem estiver na lista
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      // Rejeita a requisição CORS
+      callback(new Error(`Not allowed by CORS: ${origin}`));
+    }
+  },
+  methods: ['GET', 'POST', 'OPTIONS'], // Permite os métodos necessários para a API
+  allowedHeaders: ['Content-Type'], // Permite o cabeçalho Content-Type
 }));
 
+// ----------------------------------------------------------------------
+// ✅ REMOVEMOS A LINHA 'app.options('*', cors())' REDUNDANTE
+//    O middleware acima já lida com as requisições OPTIONS
+// ----------------------------------------------------------------------
+
 // ✅ Middleware JSON
-app.use(bodyParser.json());
+// body-parser é um middleware comum, mas o Express já o inclui. 
+// O Express usa: app.use(express.json());
+// Seu uso de bodyParser.json() está correto, mas use express.json() se quiser modernizar.
+app.use(bodyParser.json()); 
+
 
 // ✅ Rotas
 app.use('/api/contacts', (req, res, next) => {
@@ -36,8 +64,6 @@ app.use('/api/contacts', (req, res, next) => {
   next();
 }, contactsRoutes);
 
-// ✅ Resposta para preflight requests
-app.options('*', cors());
 
 // ✅ Rota de teste
 app.get('/', (req, res) => {
