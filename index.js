@@ -17,11 +17,14 @@ const pool = new Pool({
 // ✅ Disponibiliza pool para rotas (middleware simples)
 app.set('db', pool);
 
-// ✅ Permitir apenas o frontend hospedado no Vercel
+// ✅ Configuração CORS — agora com suporte a preflight (OPTIONS)
 app.use(cors({
-  origin: 'https://ped-hospitalar.vercel.app',
-  methods: ['GET', 'POST'],
-  allowedHeaders: ['Content-Type']
+  origin: [
+    'https://ped-hospitalar.vercel.app', // produção
+    'http://localhost:8080', // desenvolvimento local
+  ],
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type'],
 }));
 
 // ✅ Middleware JSON
@@ -32,6 +35,9 @@ app.use('/api/contacts', (req, res, next) => {
   req.db = pool; // injeta conexão no request
   next();
 }, contactsRoutes);
+
+// ✅ Resposta para preflight requests
+app.options('*', cors());
 
 // ✅ Rota de teste
 app.get('/', (req, res) => {
@@ -44,5 +50,5 @@ app.get('/', (req, res) => {
 // ✅ Inicia o servidor
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Servidor backend rodando na porta ${PORT}`);
+  console.log(`🚀 Servidor backend rodando na porta ${PORT}`);
 });
