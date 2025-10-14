@@ -29,7 +29,8 @@ async function setupDatabase() {
                 nome VARCHAR(255) NOT NULL,
                 email VARCHAR(255) UNIQUE NOT NULL,
                 mensagem TEXT,
-                created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+                data_envio TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP, -- ADICIONE ESTA LINHA
+                created_at TIMESTAMP WITH TIME ZONE -- Remova ou renomeie se quiser usar apenas data_envio
             );
         `;
         

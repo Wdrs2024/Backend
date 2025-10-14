@@ -1,3 +1,5 @@
+// Arquivo: controllers/contactController.js
+
 // Este arquivo é responsável por lidar com a lógica de envio de formulários de contato.
 
 /**
@@ -16,12 +18,12 @@ export const handleContactForm = async (req, res) => {
 
   try {
     // 3. Executa o comando SQL para inserir o novo contato.
-    // ⚠️ ALTERAÇÃO: Tabela 'contacts' foi alterada para 'contatos'
-    // Se o nome da sua tabela for 'contacts' ou outro nome, CORRIJA esta linha.
+    // A coluna 'data_envio' foi CORRIGIDA para 'created_at' para corresponder 
+    // à definição da tabela em db/setup.js.
     const sql = `
       INSERT INTO contatos (nome, email, mensagem)
       VALUES ($1, $2, $3)
-      RETURNING id, data_envio
+      RETURNING id, created_at
     `;
 
     const result = await req.db.query(
@@ -40,11 +42,15 @@ export const handleContactForm = async (req, res) => {
 
   } catch (err) {
     // 5. Erro: Loga o erro do banco de dados (crucial para debug no Render)
-    // E retorna 500 Internal Server Error
     console.error('Erro ao salvar contato:', err.message || err);
     
-    // Você pode enviar uma mensagem de erro mais detalhada em desenvolvimento,
-    // mas em produção, use uma mensagem genérica por segurança.
+    // Se o erro for devido a email duplicado (UNIQUE NOT NULL na tabela), 
+    // você pode retornar um erro 409:
+    if (err.code === '23505') { // Código de erro PostgreSQL para violação de UNIQUE/PRIMARY KEY
+       return res.status(409).json({ erro: 'Este e-mail já foi cadastrado.' });
+    }
+
+    // Retorna 500 Internal Server Error para outros erros.
     res.status(500).json({ erro: 'Erro interno ao salvar contato.' });
   }
 };
