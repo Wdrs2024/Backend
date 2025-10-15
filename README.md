@@ -19,7 +19,8 @@ O sistema está implantado e disponível online, utilizando serviços de hospeda
 | Serviço | Plataforma de Deploy | URL | Status |
 | :--- | :--- | :--- | :--- |
 | **Frontend** | **Vercel** | [ped-hospitalar.vercel.app](https://ped-hospitalar.vercel.app) | **Deploy em Produção** |
-| **Backend (API)** | **Render** | `https://ped-hospitalar-backend.onrender.com/` | **Deployed** |
+| **Backend (API)** | **Render** | [https://ped-hospitalar-backend.onrender.com/](https://ped-hospitalar-backend.onrender.com/) | **Deployed** |
+| **Banco de Dados** | **Render (PostgreSQL)** | *(Acesso via Backend)* | **Available** |
 
 ---
 
